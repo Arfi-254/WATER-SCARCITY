@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Report Issue – Maji Safi</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-drop">💧</span>
+      <span>MAJI SAFI</span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+       <li><a href="dashboard.html" >Dashboard</a></li>
+      <li><a href="source.html">Water Sources</a></li>
+      <li><a href="report.html" class="active">Report Issue</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <span class="badge">Community Reporting</span>
+    <h1>Report a Water Point Issue</h1>
+    <p>Help your community by reporting broken, dry, or contaminated water sources. Every report helps.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container report-layout">
+
+    <!-- FORM -->
+    <div class="report-form-wrap">
+      <h2>Submit a Report</h2>
+      <p class="form-intro">Fill in as much detail as possible so our teams can respond quickly.</p>
+
+      <form id="reportForm" novalidate>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reporterName">Your Name <span class="req">*</span></label>
+            <input type="text" id="reporterName" name="reporterName" placeholder="e.g. Fatuma Hassan"/>
+            <span class="field-error" id="err-reporterName"></span>
+          </div>
+          <div class="form-group">
+            <label for="reporterPhone">Phone Number <span class="req">*</span></label>
+            <input type="tel" id="reporterPhone" name="reporterPhone" placeholder="e.g. 0712 345 678"/>
+            <span class="field-error" id="err-reporterPhone"></span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="county">County <span class="req">*</span></label>
+            <select id="county" name="county">
+              <option value="">Select county…</option>
+              <option value="Garissa">Garissa</option>
+              <option value="Wajir">Wajir</option>
+              <option value="Mandera">Mandera</option>
+            </select>
+            <span class="field-error" id="err-county"></span>
+          </div>
+          <div class="form-group">
+            <label for="location">Village / Sub-location <span class="req">*</span></label>
+            <input type="text" id="location" name="location" placeholder="e.g. Balambala Village"/>
+            <span class="field-error" id="err-location"></span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="sourceType">Water Source Type <span class="req">*</span></label>
+            <select id="sourceType" name="sourceType">
+              <option value="">Select type…</option>
+              <option>Borehole</option>
+              <option>Hand Pump</option>
+              <option>Open Well</option>
+              <option>Water Pan</option>
+              <option>Piped Water</option>
+              <option>Other</option>
+            </select>
+            <span class="field-error" id="err-sourceType"></span>
+          </div>
+          <div class="form-group">
+            <label for="issueType">Issue Type <span class="req">*</span></label>
+            <select id="issueType" name="issueType">
+              <option value="">Select issue…</option>
+              <option>Pump broken / no water</option>
+              <option>Borehole dried up</option>
+              <option>Water contamination</option>
+              <option>Vandalism / theft</option>
+              <option>Infrastructure damage</option>
+              <option>Access blocked</option>
+              <option>Other</option>
+            </select>
+            <span class="field-error" id="err-issueType"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Urgency Level <span class="req">*</span></label>
+          <div class="severity-options" id="severityOptions">
+            <label class="severity-opt">
+              <input type="radio" name="severity" value="Low"/>
+              <span class="sev-badge sev-low">Low – Not urgent</span>
+            </label>
+            <label class="severity-opt">
+              <input type="radio" name="severity" value="Medium"/>
+              <span class="sev-badge sev-med">Medium – Affecting some</span>
+            </label>
+            <label class="severity-opt">
+              <input type="radio" name="severity" value="High"/>
+              <span class="sev-badge sev-high">High – Emergency</span>
+            </label>
+          </div>
+          <span class="field-error" id="err-severity"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description <span class="req">*</span></label>
+          <textarea id="description" name="description" rows="5" placeholder="Describe the problem in detail. When did it start? How many people are affected? Any other relevant information…"></textarea>
+          <span class="field-error" id="err-description"></span>
+          <small id="charCount">0 / 500 characters</small>
+        </div>
+
+        <div class="form-group">
+          <label for="gpsCoords">GPS Coordinates <span class="optional">(optional)</span></label>
+          <div class="gps-row">
+            <input type="text" id="gpsCoords" name="gpsCoords" placeholder="e.g. -0.4536, 42.1234" readonly/>
+            <button type="button" class="btn btn-outline btn-sm" id="getGPS">📍 Get My Location</button>
+          </div>
+          <small id="gpsStatus"></small>
+        </div>
+
+        <div class="form-check">
+          <input type="checkbox" id="consent" name="consent"/>
+          <label for="consent">I confirm this report is accurate and I consent to being contacted by water authorities regarding this report.</label>
+          <span class="field-error" id="err-consent"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">
+          Submit Report
+        </button>
+
+      </form>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="report-sidebar">
+      <h3>Recent Community Reports</h3>
+      <p class="sidebar-intro">Reports submitted by communities across the region.</p>
+      <div id="recentReports">
+        <p class="no-reports">No reports yet. Be the first to report an issue.</p>
+      </div>
+      <button class="btn btn-outline btn-sm btn-block mt-1" id="clearReports">Clear All Reports</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal" style="display:none;">
+  <div class="modal">
+    <div class="modal-icon">✅</div>
+    <h3>Report Submitted!</h3>
+    <p>Thank you for your report. Our county water team will review it and dispatch a maintenance crew as soon as possible.</p>
+    <p><strong>Reference ID:</strong> <span id="reportRefId"></span></p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="closeModal()">Done</button>
+      <a href="sources.html" class="btn btn-outline">View Water Sources</a>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="logo-drop">💧</span>
+      <strong>MAJI SAFI</strong>
+      <p>Water Source Management System<br>Northeastern Kenya</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+       <li><a href="dashboard.html" >Dashboard</a></li>
+      <a href="source.html">Water Sources</a>
+      <a href="report.html">Report Issue</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-note">
+      <p>© 2025 Maji Safi. Built for communities in Garissa, Wajir & Mandera.</p>
+      <p>In emergencies call: <strong>0800 723 599</strong></p>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script src="report.js"></script>
+</body>
+</html>

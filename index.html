@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maji Safi Water Source Management System</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-drop">💧</span>
+      <span>MAJI SAFI</span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="/dashboard.html">dashboard</a></li>
+      <li><a href="source.html">Water Sources</a></li>
+      <li><a href="report.html">Report Issue</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+  </div>
+  <div class="hero-content">
+    <span class="badge">Northeastern Kenya</span>
+    <h1>Every Drop<br><em>Counts.</em></h1>
+    <p class="hero-sub">Connecting communities in Garissa, Wajir and Mandera to safe, reliable water sources — especially when it matters most.</p>
+    <div class="hero-cta">
+      <a href="sources.html" class="btn btn-primary">Find Water Sources</a>
+      <a href="report.html" class="btn btn-outline">Report a Problem</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card">
+      <span class="stat-num" id="totalSources">48</span>
+      <span class="stat-label">Registered Sources</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num working" id="workingSources">34</span>
+      <span class="stat-label">Currently Working</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num broken" id="brokenSources">14</span>
+      <span class="stat-label">Needs Repair</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" id="reportsCount">0</span>
+      <span class="stat-label">Community Reports</span>
+    </div>
+  </div>
+</section>
+
+<!-- CHALLENGES -->
+<section class="section challenges-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">The Crisis</span>
+      <h2>Water Challenges in<br>Northeastern Kenya</h2>
+    </div>
+    <div class="challenges-grid">
+      <div class="challenge-card">
+        <div class="challenge-icon">🌵</div>
+        <h3>Severe Drought</h3>
+        <p>Garissa, Wajir, and Mandera face prolonged droughts that dry up seasonal rivers and water pans, leaving millions without adequate water for months.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-icon">⚙️</div>
+        <h3>Broken Infrastructure</h3>
+        <p>Many boreholes and hand pumps fall into disrepair. Without a reliable reporting system, communities suffer for weeks before maintenance teams are dispatched.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-icon">📍</div>
+        <h3>Remote Locations</h3>
+        <p>Dispersed settlements mean communities travel 10–30 km to fetch water, losing productive hours and exposing women and children to safety risks.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-icon">💧</div>
+        <h3>Water Quality</h3>
+        <p>Contamination from pastoralist activities, poor sanitation, and stagnant water pans cause waterborne diseases that disproportionately affect children under five.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-icon">🗺️</div>
+        <h3>Poor Data</h3>
+        <p>County water offices lack real-time information on which sources are functional, making resource allocation inefficient during emergency responses.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-icon">👥</div>
+        <h3>Community Gap</h3>
+        <p>No formal channel exists for communities to communicate directly with water authorities, creating delays between breakdown and repair.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-section">
+  <div class="container">
+    <div class="section-header center">
+      <span class="section-tag">How It Works</span>
+      <h2>Simple. Fast. Lifesaving.</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Find a Source</h3>
+        <p>Browse boreholes and wells in your county. Filter by status to find working water points near you.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Check Status</h3>
+        <p>Real-time status shows whether a source is operational, under repair, or non-functional.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Report Issues</h3>
+        <p>Submit a report when a water point breaks down. Your report alerts the county water team immediately.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3>Get Help</h3>
+        <p>Maintenance teams respond to community reports and restore services as quickly as possible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTIES -->
+<section class="section counties-section">
+  <div class="container">
+    <div class="section-header center">
+      <span class="section-tag">Coverage</span>
+      <h2>Three Counties. One Mission.</h2>
+    </div>
+    <div class="counties-grid">
+      <a href="sources.html?county=Garissa" class="county-card">
+        <div class="county-visual garissa"></div>
+        <div class="county-info">
+          <h3>Garissa</h3>
+          <p>Serving communities along the Tana River corridor and remote pastoralist villages.</p>
+          <span class="county-link">View Sources →</span>
+        </div>
+      </a>
+      <a href="sources.html?county=Wajir" class="county-card">
+        <div class="county-visual wajir"></div>
+        <div class="county-info">
+          <h3>Wajir</h3>
+          <p>Mapping boreholes across the arid rangeland of Kenya's largest county by area.</p>
+          <span class="county-link">View Sources →</span>
+        </div>
+      </a>
+      <a href="sources.html?county=Mandera" class="county-card">
+        <div class="county-visual mandera"></div>
+        <div class="county-info">
+          <h3>Mandera</h3>
+          <p>Supporting cross-border communities at the Kenya-Ethiopia-Somalia tri-border area.</p>
+          <span class="county-link">View Sources →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="container">
+    <h2>Know of a broken water point?</h2>
+    <p>Your report saves lives. It takes less than 2 minutes.</p>
+    <a href="report.html" class="btn btn-white">Submit a Report</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="logo-drop"></span>
+      <strong>MAJI SAFI</strong>
+      <p>Water Source Management System<br>Northeastern Kenya</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="source.html">Water Sources</a>
+      <a href="report.html">Report Issue</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-note">
+      <p>© 2025 Maji Safi. Built for communities in Garissa, Wajir & Mandera.</p>
+      <p>In emergencies call: <strong>0800 723 599</strong></p>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

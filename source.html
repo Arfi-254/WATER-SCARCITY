@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Water Sources  Maji Safi</title>
+  <link rel="stylesheet" href="/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-drop">💧</span>
+      <span>MAJI SAFI</span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+       <li><a href="dashboard.html" >Dashboard</a></li>
+      <li><a href="source.html">Water Sources</a></li>
+      <li><a href="report.html">Report Issue</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="page-hero">
+  <div class="container">
+    <span class="badge">Water Sources Directory</span>
+    <h1>Boreholes & Wells</h1>
+    <p>Browse all registered water points across Garissa, Wajir, and Mandera counties.</p>
+  </div>
+</div>
+
+<section class="filters-bar">
+  <div class="container">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search by name, location or county…" class="search-input"/>
+    </div>
+    <div class="filter-group">
+      <label>County</label>
+      <select id="filterCounty" class="filter-select">
+        <option value="">All Counties</option>
+        <option value="Garissa">Garissa</option>
+        <option value="Wajir">Wajir</option>
+        <option value="Mandera">Mandera</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Status</label>
+      <select id="filterStatus" class="filter-select">
+        <option value="">All Status</option>
+        <option value="Working">Working</option>
+        <option value="Not Working">Not Working</option>
+        <option value="Under Repair">Under Repair</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Type</label>
+      <select id="filterType" class="filter-select">
+        <option value="">All Types</option>
+        <option value="Borehole">Borehole</option>
+        <option value="Hand Pump">Hand Pump</option>
+        <option value="Open Well">Open Well</option>
+        <option value="Water Pan">Water Pan</option>
+      </select>
+    </div>
+    <button class="btn btn-outline btn-sm" id="clearFilters">Clear</button>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="results-meta">
+      <p id="resultsCount">Showing all sources</p>
+      <div class="legend">
+        <span class="dot dot-green"></span>Working
+        <span class="dot dot-red"></span>Not Working
+        <span class="dot dot-yellow"></span>Under Repair
+      </div>
+    </div>
+    <div class="sources-grid" id="sourcesGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <p>🔍 No water sources match your filters.</p>
+      <button class="btn btn-outline btn-sm" onclick="clearAllFilters()">Reset Filters</button>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="logo-drop">💧</span>
+      <strong>MAJI SAFI</strong>
+      <p>Water Source Management System<br>Northeastern Kenya</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+       <li><a href="dashboard.html" >Dashboard</a></li>
+      <a href="source.html">Water Sources</a>
+      <a href="report.html">Report Issue</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-note">
+      <p>© 2025 Maji Safi. Built for communities in Garissa, Wajir & Mandera.</p>
+      <p>In emergencies call: <strong>254 72168 6270</strong></p>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script src="sources.js"></script>
+</body>
+</html>
