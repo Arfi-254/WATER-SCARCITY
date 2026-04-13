@@ -1,21 +1,31 @@
-function getReports(){return JSON.perse(localStorage.getItem('majiReports')||'{}');}
+function getReports() {
+  try {
+    const data = localStorage.getItem('majiReports');
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    console.error("Error parsing reports from localStorage", e);
+    return [];
+  }
+}
 
-    function saveReports(r){localStorage.setItem('majiReports',JSON.stringify(r));}
-    function generateId(){return'RPT-'+Date.now().toString(36).toUpperCase();}
-    function renderRecentReports(){
-        const container=document.getElementById('recentReports');
-        if (!container) return;
-        const reports=getReports();
-        if(reports.length===0)
-            container.innerHTML='<p class="no-reports">No reports yet.Be the first to report an issue.</p>';
-        return;
+function saveReports(r) {
+  localStorage.setItem('majiReports', JSON.stringify(r));
+}
 
+function generateId() {
+  return 'RPT-' + Date.now().toString(36).toUpperCase();
+}
 
+function renderRecentReports() {
+  const container = document.getElementById('recentReports');
+  if (!container) return;
+  const reports = getReports();
+  if (reports.length === 0) {
+    container.innerHTML = '<p class="no-reports">No reports yet. Be the first to report an issue.</p>';
+    return;
+  }
 
-    }
-
-
-     container.innerHTML = [...reports].reverse().slice(0, 5).map(r => `
+  container.innerHTML = [...reports].reverse().slice(0, 5).map(r => `
     <div class="report-item">
       <div class="report-item-header">
         <span class="report-item-loc">${r.location}, ${r.county}</span>
@@ -25,7 +35,8 @@ function getReports(){return JSON.perse(localStorage.getItem('majiReports')||'{}
       <span class="report-item-sev sev-${r.severity}">${r.severity} Urgency</span>
     </div>
   `).join('');
-     
+}
+
 const RULES = {
   reporterName:  { validate: v => v.trim().length >= 2,                                              msg: 'Enter your name (at least 2 characters).' },
   reporterPhone: { validate: v => /^(\+?254|0)[17]\d{8}$/.test(v.replace(/\s/g,'')),                msg: 'Enter a valid Kenyan phone number (e.g. 0712 345 678).' },
@@ -38,11 +49,11 @@ const RULES = {
   consent:       { validate: () => document.getElementById('consent')?.checked,                      msg: 'You must confirm the report is accurate.' },
 };
 
-function showError(id,msg) {
-    const err = document.getElementById('err-' + id);
-    const inp = document.getElementById('id')|| (id=== 'severity' ? document.getElementById('severityOptions') : null);
-    if(err)err.textContent = msg;
-    if(inp)inp.classList.add('error');
+function showError(id, msg) {
+  const err = document.getElementById('err-' + id);
+  const inp = document.getElementById(id) || (id === 'severity' ? document.getElementById('severityOptions') : null);
+  if (err) err.textContent = msg;
+  if (inp) inp.classList.add('error');
 }
 
 function clearError(id) {
@@ -51,24 +62,36 @@ function clearError(id) {
   if (err) err.textContent = '';
   if (inp) inp.classList.remove('error');
 }
-function clearAllErrors() { Object.keys(RULES).forEach(clearError); }
+
+function clearAllErrors() {
+  Object.keys(RULES).forEach(clearError);
+}
 
 function validateForm() {
   let valid = true;
   clearAllErrors();
   Object.entries(RULES).forEach(([field, rule]) => {
     const el = document.getElementById(field);
-    if (!rule.validate(el ? el.value : '')) { showError(field, rule.msg); valid = false; }
+    const value = el ? (el.type === 'checkbox' ? el.checked : el.value) : '';
+    if (!rule.validate(value)) {
+      showError(field, rule.msg);
+      valid = false;
+    }
   });
   return valid;
 }
 
-
 Object.keys(RULES).forEach(field => {
   const el = document.getElementById(field);
   if (!el) return;
-  el.addEventListener('blur', () => { if (!RULES[field].validate(el.value)) showError(field, RULES[field].msg); else clearError(field); });
-  if (el.type !== 'checkbox') el.addEventListener('input', () => clearError(field));
+  el.addEventListener('blur', () => {
+    const value = el.type === 'checkbox' ? el.checked : el.value;
+    if (!RULES[field].validate(value)) showError(field, RULES[field].msg);
+    else clearError(field);
+  });
+  if (el.type !== 'checkbox' && el.type !== 'radio') {
+    el.addEventListener('input', () => clearError(field));
+  }
 });
 
 const desc = document.getElementById('description');
@@ -82,13 +105,15 @@ if (desc && charCount) {
   });
 }
 
-
 const getGPSBtn = document.getElementById('getGPS');
 const gpsInput  = document.getElementById('gpsCoords');
 const gpsStatus = document.getElementById('gpsStatus');
 if (getGPSBtn) {
   getGPSBtn.addEventListener('click', () => {
-    if (!navigator.geolocation) { gpsStatus.textContent = 'Geolocation not supported.'; return; }
+    if (!navigator.geolocation) {
+      gpsStatus.textContent = 'Geolocation not supported.';
+      return;
+    }
     getGPSBtn.textContent = '⏳ Getting location…';
     getGPSBtn.disabled = true;
     navigator.geolocation.getCurrentPosition(
@@ -105,7 +130,9 @@ if (getGPSBtn) {
         getGPSBtn.textContent = '📍 Get My Location';
         getGPSBtn.disabled = false;
       },
-      { timeout: 10000 }
+      {
+        timeout: 10000
+      }
     );
   });
 }
@@ -113,21 +140,24 @@ if (getGPSBtn) {
 document.getElementById('reportForm')?.addEventListener('submit', e => {
   e.preventDefault();
   if (!validateForm()) {
-    document.querySelector('.error')?.scrollIntoView({ behavior:'smooth', block:'center' });
+    document.querySelector('.error')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
     return;
   }
   const report = {
     id: generateId(),
     timestamp: new Date().toISOString(),
-    reporterName:  document.getElementById('reporterName').value.trim(),
+    reporterName: document.getElementById('reporterName').value.trim(),
     reporterPhone: document.getElementById('reporterPhone').value.trim(),
-    county:        document.getElementById('county').value,
-    location:      document.getElementById('location').value.trim(),
-    sourceType:    document.getElementById('sourceType').value,
-    issueType:     document.getElementById('issueType').value,
-    severity:      document.querySelector('input[name="severity"]:checked').value,
-    description:   document.getElementById('description').value.trim(),
-    gpsCoords:     document.getElementById('gpsCoords').value || 'Not provided',
+    county: document.getElementById('county').value,
+    location: document.getElementById('location').value.trim(),
+    sourceType: document.getElementById('sourceType').value,
+    issueType: document.getElementById('issueType').value,
+    severity: document.querySelector('input[name="severity"]:checked').value,
+    description: document.getElementById('description').value.trim(),
+    gpsCoords: document.getElementById('gpsCoords').value || 'Not provided',
   };
   const reports = getReports();
   reports.push(report);
@@ -138,17 +168,26 @@ document.getElementById('reportForm')?.addEventListener('submit', e => {
   clearAllErrors();
   if (charCount) charCount.textContent = '0 / 500 characters';
   if (gpsInput) gpsInput.value = '';
-  if (gpsStatus) { gpsStatus.textContent = ''; }
+  if (gpsStatus) {
+    gpsStatus.textContent = '';
+  }
   if (getGPSBtn) getGPSBtn.textContent = '📍 Get My Location';
   renderRecentReports();
 });
 
-function closeModal() { document.getElementById('successModal').style.display = 'none'; }
+function closeModal() {
+  document.getElementById('successModal').style.display = 'none';
+}
 window.closeModal = closeModal;
-document.getElementById('successModal')?.addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+document.getElementById('successModal')?.addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
 
 document.getElementById('clearReports')?.addEventListener('click', () => {
-  if (confirm('Delete all stored reports?')) { localStorage.removeItem('majiReports'); renderRecentReports(); }
+  if (confirm('Delete all stored reports?')) {
+    localStorage.removeItem('majiReports');
+    renderRecentReports();
+  }
 });
 
 renderRecentReports();

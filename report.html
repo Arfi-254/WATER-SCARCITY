@@ -6,6 +6,7 @@
   <title>Report Issue – Maji Safi</title>
   <link rel="stylesheet" href="style.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="auth.js"></script>
 </head>
 <body>
 
@@ -20,10 +21,9 @@
     </button>
     <ul class="nav-links" id="navLinks">
       <li><a href="index.html">Home</a></li>
-       <li><a href="dashboard.html" >Dashboard</a></li>
       <li><a href="source.html">Water Sources</a></li>
       <li><a href="report.html" class="active">Report Issue</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li id="authLinks" style="display: flex; align-items: center; gap: 15px; margin-left: 10px;"></li>
     </ul>
   </div>
 </nav>
@@ -162,7 +162,7 @@
       <div id="recentReports">
         <p class="no-reports">No reports yet. Be the first to report an issue.</p>
       </div>
-      <button class="btn btn-outline btn-sm btn-block mt-1" id="clearReports">Clear All Reports</button>
+      <button class="btn btn-outline btn-sm btn-block mt-1" id="clearReports" style="display:none;">Clear All Reports (Admin)</button>
     </div>
 
   </div>
@@ -177,7 +177,7 @@
     <p><strong>Reference ID:</strong> <span id="reportRefId"></span></p>
     <div class="modal-actions">
       <button class="btn btn-primary" onclick="closeModal()">Done</button>
-      <a href="sources.html" class="btn btn-outline">View Water Sources</a>
+      <a href="source.html" class="btn btn-outline">View Water Sources</a>
     </div>
   </div>
 </div>
@@ -191,7 +191,6 @@
     </div>
     <div class="footer-links">
       <a href="index.html">Home</a>
-       <li><a href="dashboard.html" >Dashboard</a></li>
       <a href="source.html">Water Sources</a>
       <a href="report.html">Report Issue</a>
       <a href="contact.html">Contact</a>
@@ -205,5 +204,40 @@
 
 <script src="main.js"></script>
 <script src="report.js"></script>
+<script>
+  function updateNav() {
+    const navLinks = document.getElementById('navLinks');
+    const session = getSession();
+    const currentPage = window.location.pathname.split('/').pop() || 'report.html';
+    const clearBtn = document.getElementById('clearReports');
+
+    if (session) {
+      if (session.role === 'user') {
+        navLinks.innerHTML = `
+          <li><a href="dashboard.html" class="${currentPage === 'dashboard.html' ? 'active' : ''}">My Dashboard</a></li>
+          <li><a href="report.html" class="${currentPage === 'report.html' ? 'active' : ''}">Report Issue</a></li>
+          <li><button onclick="logout()" class="btn btn-outline btn-sm" style="margin-left:10px;">Logout</button></li>
+        `;
+      } else if (session.role === 'admin') {
+        navLinks.innerHTML = `
+          <li><a href="admin/index.html">Dashboard</a></li>
+          <li><button onclick="logout()" class="btn btn-outline btn-sm" style="margin-left:10px;">Logout</button></li>
+        `;
+        if (clearBtn) clearBtn.style.display = 'block';
+      }
+    } else {
+      navLinks.innerHTML = `
+        <li><a href="index.html">Home</a></li>
+        <li><a href="source.html">Water Sources</a></li>
+        <li><a href="report.html" class="active">Report Issue</a></li>
+        <li style="display: flex; align-items: center; gap: 15px; margin-left: 10px;">
+          <a href="login.html" style="font-weight:600; color:var(--primary);">Login</a>
+          <a href="signup.html" class="btn btn-primary btn-sm" style="color:white;">Join Us</a>
+        </li>
+      `;
+    }
+  }
+  document.addEventListener('DOMContentLoaded', updateNav);
+</script>
 </body>
 </html>

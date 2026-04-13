@@ -3,16 +3,27 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard – Maji Safi</title>
+  <title>My Dashboard – Maji Safi</title>
   <link rel="stylesheet" href="style.css"/>
-  <link rel="stylesheet" href="dashboard.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    .user-welcome { background: var(--primary-dark); padding: 60px 0 40px; color: var(--white); }
+    .user-welcome h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 8px; }
+    .user-welcome p { color: rgba(255,255,255,0.7); }
+    .user-grid { display: grid; grid-template-columns: 1fr 350px; gap: 30px; margin-top: -30px; }
+    .user-main-card { background: var(--white); border-radius: var(--radius-lg); padding: 30px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+    .user-side-card { background: var(--white); border-radius: var(--radius-lg); padding: 25px; box-shadow: var(--shadow); border: 1px solid var(--border); height: fit-content; }
+    .card-title { font-family: var(--font-display); font-size: 1.3rem; color: var(--primary-dark); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+  </style>
 </head>
 <body>
 
+<script src="auth.js"></script>
+<script>requireAuth('user');</script>
+
 <nav class="navbar">
   <div class="nav-inner">
-    <a href="index.html" class="logo">
+    <a href="dashboard.html" class="logo">
       <span class="logo-drop">💧</span>
       <span>MAJI SAFI</span>
     </a>
@@ -20,222 +31,114 @@
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-links" id="navLinks">
-      <li><a href="index.html">Home</a></li>
-       <li><a href="dashboard.html" >Dashboard</a></li>
-      <li><a href="source.html">Water Sources</a></li>
-      <li><a href="report.html">Report Issue</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <!-- Injected by JS -->
     </ul>
   </div>
 </nav>
 
-<div class="dash-header">
+<section class="user-welcome">
   <div class="container">
-    <div class="dash-header-left">
-      <span class="badge">Admin Overview</span>
-      <h1>Water Sources Dashboard</h1>
-      <p>Live overview of all water points across Garissa, Wajir &amp; Mandera.</p>
-    </div>
-    <div class="dash-header-right">
-      <div class="last-updated">
-        <span class="pulse-dot"></span>
-        Updated: <strong id="lastUpdated"></strong>
-      </div>
-      <a href="report.html" class="btn btn-primary btn-sm">+ New Report</a>
-    </div>
-  </div>
-</div>
-
-<!-- KPI CARDS -->
-<section class="dash-section">
-  <div class="container">
-    <div class="kpi-grid">
-      <div class="kpi-card kpi-total">
-        <div class="kpi-icon">🗺️</div>
-        <div class="kpi-body">
-          <span class="kpi-num" id="kpiTotal">36</span>
-          <span class="kpi-label">Total Sources</span>
-        </div>
-        <div class="kpi-trend up">3 counties covered</div>
-      </div>
-      <div class="kpi-card kpi-working">
-        <div class="kpi-icon">✅</div>
-        <div class="kpi-body">
-          <span class="kpi-num" id="kpiWorking">–</span>
-          <span class="kpi-label">Working</span>
-        </div>
-        <div class="kpi-trend up" id="kpiWorkingPct"></div>
-      </div>
-      <div class="kpi-card kpi-broken">
-        <div class="kpi-icon">❌</div>
-        <div class="kpi-body">
-          <span class="kpi-num" id="kpiBroken">–</span>
-          <span class="kpi-label">Not Working</span>
-        </div>
-        <div class="kpi-trend down" id="kpiBrokenPct"></div>
-      </div>
-      <div class="kpi-card kpi-repair">
-        <div class="kpi-icon">🔧</div>
-        <div class="kpi-body">
-          <span class="kpi-num" id="kpiRepair">–</span>
-          <span class="kpi-label">Under Repair</span>
-        </div>
-        <div class="kpi-trend neutral" id="kpiRepairPct"></div>
-      </div>
-      <div class="kpi-card kpi-reports">
-        <div class="kpi-icon">📋</div>
-        <div class="kpi-body">
-          <span class="kpi-num" id="kpiReports">0</span>
-          <span class="kpi-label">Community Reports</span>
-        </div>
-        <div class="kpi-trend up">Submitted by community</div>
+    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+      <div>
+        <span class="badge" id="userCounty"></span>
+        <h1 id="welcomeText">Hello, User</h1>
+        <p>Manage your water reports and stay updated on local water sources.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CHARTS -->
-<section class="dash-section">
-  <div class="container">
-    <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-card-header">
-          <h3>Status Breakdown</h3>
-          <span class="chart-subtitle">All 36 sources</span>
-        </div>
-        <div class="donut-wrap">
-          <svg class="donut-svg" viewBox="0 0 120 120" id="donutChart">
-            <circle class="donut-bg" cx="60" cy="60" r="50"/>
-            <circle class="donut-seg seg-working" cx="60" cy="60" r="50" id="segWorking"/>
-            <circle class="donut-seg seg-broken"  cx="60" cy="60" r="50" id="segBroken"/>
-            <circle class="donut-seg seg-repair"  cx="60" cy="60" r="50" id="segRepair"/>
-          </svg>
-          <div class="donut-center">
-            <span class="donut-pct" id="donutPct">–</span>
-            <span class="donut-lbl">Operational</span>
+<section class="section">
+  <div class="container user-grid">
+    <div class="user-main-card">
+      <div class="card-title">
+        <span>My Recent Reports</span>
+        <a href="report.html" class="btn btn-primary btn-sm">+ New Report</a>
+      </div>
+      <div id="userReportsList">
+        <!-- Reports will be injected here -->
+      </div>
+    </div>
+
+    <div class="user-side-card">
+      <div class="card-title">Profile Info</div>
+      <div class="contact-list">
+        <div class="contact-item">
+          <span>📧</span>
+          <div>
+            <strong>Email</strong>
+            <p id="userEmail"></p>
           </div>
         </div>
-        <div class="donut-legend">
-          <div class="dl-item"><span class="dl-dot dl-green"></span>Working <strong id="lgWorking">–</strong></div>
-          <div class="dl-item"><span class="dl-dot dl-red"></span>Not Working <strong id="lgBroken">–</strong></div>
-          <div class="dl-item"><span class="dl-dot dl-yellow"></span>Under Repair <strong id="lgRepair">–</strong></div>
+        <div class="contact-item">
+          <span>📍</span>
+          <div>
+            <strong>Assigned County</strong>
+            <p id="profileCounty"></p>
+          </div>
         </div>
       </div>
-
-      <div class="chart-card">
-        <div class="chart-card-header">
-          <h3>Sources by County</h3>
-          <span class="chart-subtitle">Working vs Not Working vs Repair</span>
-        </div>
-        <div class="bar-chart" id="barChart"></div>
-      </div>
-
-      <div class="chart-card">
-        <div class="chart-card-header">
-          <h3>Source Types</h3>
-          <span class="chart-subtitle">Distribution across all counties</span>
-        </div>
-        <div class="type-bars" id="typeBars"></div>
-      </div>
+      <hr style="margin:20px 0; border:0; border-top:1px solid var(--border);">
+      <p style="font-size:0.85rem; color:var(--text-muted);">Your reports are sent directly to the <span id="countyName"></span> County Water Office.</p>
     </div>
   </div>
 </section>
 
-<!-- COUNTY DETAIL -->
-<section class="dash-section">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-tag">County Breakdown</span>
-      <h2>Performance by County</h2>
-    </div>
-    <div class="county-dash-grid" id="countyDashGrid"></div>
-  </div>
-</section>
+<script>
+  function updateNav() {
+    const navLinks = document.getElementById('navLinks');
+    const session = getSession();
+    const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
 
-<!-- REPORTS TABLE -->
-<section class="dash-section">
-  <div class="container">
-    <div class="table-card">
-      <div class="table-card-header">
-        <div>
-          <h3>Community Reports Log</h3>
-          <p>Reports submitted via the Report Issue page</p>
+    if (session) {
+      navLinks.innerHTML = `
+        <li><a href="dashboard.html" class="${currentPage === 'dashboard.html' ? 'active' : ''}">My Dashboard</a></li>
+        <li><a href="report.html" class="${currentPage === 'report.html' ? 'active' : ''}">Report Issue</a></li>
+        <li><button onclick="logout()" class="btn btn-outline btn-sm" style="margin-left:10px;">Logout</button></li>
+      `;
+    }
+  }
+  document.addEventListener('DOMContentLoaded', updateNav);
+
+  const session = getSession();
+  if (session) {
+    document.getElementById('welcomeText').textContent = `Hello, ${session.name.split(' ')[0]}`;
+    document.getElementById('userCounty').textContent = session.county;
+    document.getElementById('profileCounty').textContent = session.county;
+    document.getElementById('userEmail').textContent = session.email;
+    document.getElementById('countyName').textContent = session.county;
+  }
+
+  function renderUserReports() {
+    const reports = JSON.parse(localStorage.getItem('majiReports') || '[]');
+    const userReports = reports.filter(r => r.reporterName === session.name); 
+    const container = document.getElementById('userReportsList');
+
+    if (userReports.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <p>You haven't submitted any reports yet.</p>
+          <a href="report.html" class="btn btn-outline btn-sm">Report a Water Issue</a>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = userReports.reverse().map(r => `
+      <div class="report-item">
+        <div class="report-item-header">
+          <span class="report-item-loc">${r.location}</span>
+          <span class="report-item-date">${new Date(r.timestamp).toLocaleDateString()}</span>
         </div>
-        <div class="table-actions">
-          <button class="btn btn-outline btn-sm" id="exportBtn">⬇ Export CSV</button>
-          <button class="btn btn-outline btn-sm" id="clearDashReports">🗑 Clear All</button>
+        <div class="report-item-issue">${r.issueType}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+          <span class="report-item-sev sev-${r.severity}">${r.severity} Urgency</span>
+          <span class="ref-id">${r.id}</span>
         </div>
       </div>
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Ref ID</th><th>Date</th><th>Reporter</th>
-              <th>County</th><th>Location</th><th>Issue</th><th>Urgency</th>
-            </tr>
-          </thead>
-          <tbody id="reportsTableBody"></tbody>
-        </table>
-        <div class="empty-table" id="emptyTable" style="display:none;">
-          <p>📋 No community reports yet.</p>
-          <a href="report.html" class="btn btn-outline btn-sm">Submit First Report</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    `).join('');
+  }
 
-<!-- SOURCES TABLE -->
-<section class="dash-section">
-  <div class="container">
-    <div class="table-card">
-      <div class="table-card-header">
-        <div>
-          <h3>All Water Sources Registry</h3>
-          <p>Complete list of 36 registered water points</p>
-        </div>
-        <div class="table-actions">
-          <input type="text" id="tableSearch" placeholder="🔍 Search sources…" class="table-search"/>
-        </div>
-      </div>
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>#</th><th>Name</th><th>County</th><th>Location</th>
-              <th>Type</th><th>Status</th><th>Capacity</th><th>Last Checked</th>
-            </tr>
-          </thead>
-          <tbody id="sourcesTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="container footer-inner">
-    <div class="footer-brand">
-      <span class="logo-drop">💧</span>
-      <strong>MAJI SAFI</strong>
-      <p>Water Source Management System<br>Northeastern Kenya</p>
-    </div>
-    <div class="footer-links">
-      <a href="index.html">Home</a>
-      <a href="source.html">Water Sources</a>
-      <a href="report.html">Report Issue</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="contact.html">Contact</a>
-    </div>
-    <div class="footer-note">
-      <p>© 2025 Maji Safi. Built for communities in Garissa, Wajir & Mandera.</p>
-      <p>In emergencies call: <strong>0800 723 599</strong></p>
-    </div>
-  </div>
-</footer>
-
-<script src="main.js"></script>
-<script src="source.js"></script>
-<script src="dashboard.js"></script>
+  renderUserReports();
+</script>
 </body>
 </html>

@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Water Sources  Maji Safi</title>
+  <title>Water Sources - Maji Safi</title>
   <link rel="stylesheet" href="/style.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="auth.js"></script>
 </head>
 <body>
 
@@ -19,11 +20,7 @@
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-links" id="navLinks">
-      <li><a href="index.html">Home</a></li>
-       <li><a href="dashboard.html" >Dashboard</a></li>
-      <li><a href="source.html">Water Sources</a></li>
-      <li><a href="report.html">Report Issue</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <!-- Injected by JS -->
     </ul>
   </div>
 </nav>
@@ -100,10 +97,7 @@
     </div>
     <div class="footer-links">
       <a href="index.html">Home</a>
-       <li><a href="dashboard.html" >Dashboard</a></li>
       <a href="source.html">Water Sources</a>
-      <a href="report.html">Report Issue</a>
-      <a href="contact.html">Contact</a>
     </div>
     <div class="footer-note">
       <p>© 2025 Maji Safi. Built for communities in Garissa, Wajir & Mandera.</p>
@@ -113,6 +107,37 @@
 </footer>
 
 <script src="main.js"></script>
-<script src="sources.js"></script>
+<script src="source.js"></script>
+<script>
+  function updateNav() {
+    const navLinks = document.getElementById('navLinks');
+    const session = getSession();
+    const currentPage = window.location.pathname.split('/').pop() || 'source.html';
+
+    if (session) {
+      if (session.role === 'user') {
+        navLinks.innerHTML = `
+          <li><a href="signup.html">Report a Problem</a></li>
+          <li><a href="dashboard.html">My Dashboard</a></li>
+        `;
+      } else if (session.role === 'admin') {
+        navLinks.innerHTML = `
+          <li><a href="admin/index.html">Dashboard</a></li>
+        `;
+      }
+      navLinks.innerHTML += `<li><button onclick="logout()" class="btn btn-outline btn-sm" style="margin-left:10px;">Logout</button></li>`;
+    } else {
+      navLinks.innerHTML = `
+        <li><a href="index.html">Home</a></li>
+        <li><a href="source.html" class="active">Water Sources</a></li>
+        <li><a href="signup.html">Report a Problem</a></li>
+        <li style="display: flex; align-items: center; margin-left: 10px;">
+          <a href="signup.html" class="btn btn-primary btn-sm" style="color:white;">Join Us</a>
+        </li>
+      `;
+    }
+  }
+  document.addEventListener('DOMContentLoaded', updateNav);
+</script>
 </body>
 </html>
