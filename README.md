@@ -68,7 +68,7 @@ $$W_{rem} = V_{initial} - (C_{rate} \times t)$$
 ## 📥 Installation & Setup
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/yourusername/maji-safi.git](https://github.com/yourusername/maji-safi.git)
+    git clone [git@github.com:Arfi-254/WATER-SCARCITY.git](git@github.com:Arfi-254/WATER-SCARCITY.git)
     ```
 2.  **Install dependencies:**
     ```bash
