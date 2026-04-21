@@ -1,51 +1,85 @@
-Maji Safi is a web-based system designed to address water scarcity by monitoring water levels,tracking usage,and providing real-time alerts.
-the project focuses on regions like Garissa,Kenya,where access to clean and reliable water remains a daily challenge .
-**problems**
-Water scarcity in arid regions such as Garissa is driven by:
 
-Unpredictable rainfall and recurring drought
-Inefficient water distribution systems
-Lack of real-time monitoring
-High levels of water loss and wastage
+# Maji Safi 💧
+
+**Maji Safi** is a web-based system designed to address water scarcity by monitoring water levels, tracking usage, and providing real-time alerts. The project focuses on regions like **Garissa, Kenya**, where access to clean and reliable water remains a daily challenge.
+
+---
+
+## 💡 Inspiration
+Growing up and working in Kenya, I’ve seen firsthand how water scarcity isn't just a statistic—it’s a daily struggle that dictates the rhythm of life for families in arid regions. 
+
+The inspiration for Maji Safi came from a simple observation: **you cannot manage what you cannot measure.** Most communities rely on guesswork to know when their tanks will run dry. I wanted to build a bridge between high-tech IoT concepts and the people who need them most, creating a visual tool that turns abstract water data into actionable insights for sustainable management.
+
+---
+
+## ⚠️ The Problem
+Water scarcity in arid regions such as Garissa is driven by:
+* **Unpredictable Rainfall:** Recurring droughts and climate instability.
+* **Inefficient Distribution:** Lack of infrastructure to track where water goes.
+* **No Real-Time Data:** Communities often don't know they are out of water until the tap runs dry.
+* **Wastage:** High levels of water loss due to leaks or unmonitored consumption.
 
 As a result, communities face limited access to safe water, affecting health, education, and livelihoods.
 
-**Solution**
+---
 
-Maji safi provides a simple, interactive platform that enables users to monitor and manage water resources more effectively.
+## ✅ The Solution
+Maji Safi provides a simple, interactive platform that enables users to monitor and manage water resources more effectively. By making water usage visible and understandable, the system helps reduce wastage and improves local decision-making.
 
-The system makes water usage visible and understandable, helping reduce wastage and improve decision-making.
+### **Core Features**
+* **Monitor Water Levels:** View current water availability through a live, intuitive dashboard.
+* **Simulate Usage:** Interact with the system to see how different consumption behaviors impact water levels over time.
+* **Real-Time Alerts:** Get notified immediately when water levels drop below safe thresholds.
+* **Track Trends:** Analyze historical data to understand consumption patterns.
 
-** What the Project Does**
+---
 
-Fiska allows users to:
+## 🛠️ Development Process
+Building Maji Safi was an exercise in creating a seamless, reactive user experience that could eventually handle high-frequency data from physical sensors.
 
-Monitor Water Levels
-View current water availability through a live dashboard
- Simulate Water Usage
-Interact with the system to see how water levels change over time
- Receive Alerts
-Get notified when water levels drop below safe limits
- Track Usage Trends
-Understand how water is being consumed
- How It Works
+### **Tech Stack**
+* **Frontend:** React.js (Vite 7) for a fast, modern development workflow.
+* **Styling:** Tailwind CSS for a responsive UI optimized for both desktop and mobile users in the field.
+* **State Management:** React Context API to synchronize water levels across the simulation and alert modules.
+* **Logic:** Custom JavaScript intervals to simulate real-time "drainage" and "refill" cycles.
 
-The application uses simulated data to represent water levels and usage patterns.
-User interactions trigger changes in the system, demonstrating how water consumption impacts availability.
+### **Key Challenges**
+1.  **Simulation Accuracy:** Implementing logic that realistically represents how water depletes based on active "taps" or users.
+2.  **Predictive Alerts:** Designing the system to trigger notifications not just at a hard "low" limit, but by calculating the estimated time remaining before the source is empty.
 
-In real-world deployment, Maji safi  can be integrated with IoT sensors to provide live data from water tanks and pipelines.
-Maji safi aims to:
+---
 
-Improve awareness of water usage
-Reduce water wastage
-Support efficient water distribution
-Provide a scalable solution for water-scarce communities
- Future Improvements
-Integration with real-time sensor data
-Mobile application for wider access
-AI-powered water usage predictions
-Expansion to other arid and semi-arid regions
- Conclusion
+## ⚙️ How It Works
+The application currently uses simulated data to represent water levels. In a real-world deployment, Maji Safi is designed to integrate with **IoT sensors** (such as ultrasonic depth sensors) to provide live data from physical water tanks and pipelines.
 
-Maji safi demonstrates how technology can be used to tackle real-world challenges like water scarcity.
-By combining simplicity with functionality, it provides a foundation for smarter and more sustainable water management systems.
+The system calculates remaining volume ($W_{rem}$) using the formula:
+$$W_{rem} = V_{initial} - (C_{rate} \times t)$$
+
+---
+
+## 🚀 Future Improvements
+* **IoT Integration:** Connecting the dashboard to physical hardware (ESP32/Arduino).
+* **Mobile App:** Developing a lightweight mobile version for wider offline access.
+* **AI Predictions:** Using machine learning to predict future water shortages based on historical weather and usage data.
+* **M-Pesa Integration:** Implementing a billing system for communal water points.
+
+---
+
+## 📥 Installation & Setup
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/yourusername/maji-safi.git](https://github.com/yourusername/maji-safi.git)
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Run the app:**
+    ```bash
+    npm run dev
+    ```
+
+---
+
+## 📝 Conclusion
+Maji Safi demonstrates how technology can be used to tackle real-world challenges like water scarcity. By combining simplicity with functionality, it provides a foundation for smarter and more sustainable water management systems in Kenya and beyond.
