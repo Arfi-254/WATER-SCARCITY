@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Water Sources - Maji Safi</title>
-  <link rel="stylesheet" href="/style.css"/>
+  <title>Boreholes - Maji Safi</title>
+  <link rel="stylesheet" href="style.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <script src="auth.js"></script>
 </head>
@@ -20,15 +20,15 @@
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-links" id="navLinks">
-      <!-- Injected by JS -->
     </ul>
   </div>
 </nav>
+
 <div class="page-hero">
   <div class="container">
-    <span class="badge">Water Sources Directory</span>
-    <h1>Boreholes & Wells</h1>
-    <p>Browse all registered water points across Garissa, Wajir, and Mandera counties.</p>
+    <span class="badge">Directory</span>
+    <h1>Water Points</h1>
+    <p>Find working boreholes and wells in Garissa, Wajir, and Mandera.</p>
   </div>
 </div>
 
@@ -36,7 +36,7 @@
   <div class="container">
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Search by name, location or county…" class="search-input"/>
+      <input type="text" id="searchInput" placeholder="Search points..." class="search-input"/>
     </div>
     <div class="filter-group">
       <label>County</label>
@@ -56,34 +56,19 @@
         <option value="Under Repair">Under Repair</option>
       </select>
     </div>
-    <div class="filter-group">
-      <label>Type</label>
-      <select id="filterType" class="filter-select">
-        <option value="">All Types</option>
-        <option value="Borehole">Borehole</option>
-        <option value="Hand Pump">Hand Pump</option>
-        <option value="Open Well">Open Well</option>
-        <option value="Water Pan">Water Pan</option>
-      </select>
-    </div>
-    <button class="btn btn-outline btn-sm" id="clearFilters">Clear</button>
+    <button class="btn btn-outline btn-sm" id="clearFilters">Reset</button>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
     <div class="results-meta">
-      <p id="resultsCount">Showing all sources</p>
-      <div class="legend">
-        <span class="dot dot-green"></span>Working
-        <span class="dot dot-red"></span>Not Working
-        <span class="dot dot-yellow"></span>Under Repair
-      </div>
+      <p id="resultsCount">Checking sources...</p>
     </div>
     <div class="sources-grid" id="sourcesGrid"></div>
     <div class="empty-state" id="emptyState" style="display:none;">
-      <p>🔍 No water sources match your filters.</p>
-      <button class="btn btn-outline btn-sm" onclick="clearAllFilters()">Reset Filters</button>
+      <p>No results found for these filters.</p>
+      <button class="btn btn-outline btn-sm" onclick="clearAllFilters()">Clear Filters</button>
     </div>
   </div>
 </section>
@@ -91,53 +76,16 @@
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <span class="logo-drop">💧</span>
       <strong>MAJI SAFI</strong>
-      <p>Water Source Management System<br>Northeastern Kenya</p>
     </div>
     <div class="footer-links">
       <a href="index.html">Home</a>
       <a href="source.html">Water Sources</a>
-    </div>
-    <div class="footer-note">
-      <p>© 2025 Maji Safi. Built for communities in Garissa, Wajir & Mandera.</p>
-      <p>In emergencies call: <strong>254 72168 6270</strong></p>
     </div>
   </div>
 </footer>
 
 <script src="main.js"></script>
 <script src="source.js"></script>
-<script>
-  function updateNav() {
-    const navLinks = document.getElementById('navLinks');
-    const session = getSession();
-    const currentPage = window.location.pathname.split('/').pop() || 'source.html';
-
-    if (session) {
-      if (session.role === 'user') {
-        navLinks.innerHTML = `
-          <li><a href="signup.html">Report a Problem</a></li>
-          <li><a href="dashboard.html">My Dashboard</a></li>
-        `;
-      } else if (session.role === 'admin') {
-        navLinks.innerHTML = `
-          <li><a href="admin/index.html">Dashboard</a></li>
-        `;
-      }
-      navLinks.innerHTML += `<li><button onclick="logout()" class="btn btn-outline btn-sm" style="margin-left:10px;">Logout</button></li>`;
-    } else {
-      navLinks.innerHTML = `
-        <li><a href="index.html">Home</a></li>
-        <li><a href="source.html" class="active">Water Sources</a></li>
-        <li><a href="signup.html">Report a Problem</a></li>
-        <li style="display: flex; align-items: center; margin-left: 10px;">
-          <a href="signup.html" class="btn btn-primary btn-sm" style="color:white;">Join Us</a>
-        </li>
-      `;
-    }
-  }
-  document.addEventListener('DOMContentLoaded', updateNav);
-</script>
 </body>
 </html>

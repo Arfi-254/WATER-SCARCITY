@@ -1,137 +1,118 @@
-function getReports() {
+function loadReports() {
   try {
-    const data = localStorage.getItem('majiReports');
-    return data ? JSON.parse(data) : [];
-  } catch (e) {
-    console.error("Error parsing reports from localStorage", e);
+    const rawData = localStorage.getItem('majiReports');
+    return rawData ? JSON.parse(rawData) : [];
+  } catch (err) {
+    console.error("Failed to read reports", err);
     return [];
   }
 }
 
-function saveReports(r) {
-  localStorage.setItem('majiReports', JSON.stringify(r));
+function persistReports(list) {
+  localStorage.setItem('majiReports', JSON.stringify(list));
 }
 
-function generateId() {
-  return 'RPT-' + Date.now().toString(36).toUpperCase();
+function makeReportId() {
+  return 'RPT-' + Math.random().toString(36).substring(2, 9).toUpperCase();
 }
 
-function renderRecentReports() {
-  const container = document.getElementById('recentReports');
-  if (!container) return;
-  const reports = getReports();
-  if (reports.length === 0) {
-    container.innerHTML = '<p class="no-reports">No reports yet. Be the first to report an issue.</p>';
+function showRecentReports() {
+  const box = document.getElementById('recentReports');
+  if (!box) return;
+  const list = loadReports();
+  if (list.length === 0) {
+    box.innerHTML = '<p class="no-reports">No reports yet. Be the first to report an issue.</p>';
     return;
   }
 
-  container.innerHTML = [...reports].reverse().slice(0, 5).map(r => `
+  box.innerHTML = [...list].reverse().slice(0, 5).map(item => `
     <div class="report-item">
       <div class="report-item-header">
-        <span class="report-item-loc">${r.location}, ${r.county}</span>
-        <span class="report-item-date">${new Date(r.timestamp).toLocaleDateString()}</span>
+        <span class="report-item-loc">${item.location}, ${item.county}</span>
+        <span class="report-item-date">${new Date(item.timestamp).toLocaleDateString()}</span>
       </div>
-      <div class="report-item-issue">${r.issueType}</div>
-      <span class="report-item-sev sev-${r.severity}">${r.severity} Urgency</span>
+      <div class="report-item-issue">${item.issueType}</div>
+      <span class="report-item-sev sev-${item.severity}">${item.severity} Urgency</span>
     </div>
   `).join('');
 }
 
-const RULES = {
-  reporterName:  { validate: v => v.trim().length >= 2,                                              msg: 'Enter your name (at least 2 characters).' },
-  reporterPhone: { validate: v => /^(\+?254|0)[17]\d{8}$/.test(v.replace(/\s/g,'')),                msg: 'Enter a valid Kenyan phone number (e.g. 0712 345 678).' },
-  county:        { validate: v => v !== '',                                                           msg: 'Please select a county.' },
-  location:      { validate: v => v.trim().length >= 3,                                              msg: 'Enter the village or sub-location (min. 3 characters).' },
-  sourceType:    { validate: v => v !== '',                                                           msg: 'Please select the water source type.' },
-  issueType:     { validate: v => v !== '',                                                           msg: 'Please select the type of issue.' },
-  severity:      { validate: () => !!document.querySelector('input[name="severity"]:checked'),       msg: 'Please select an urgency level.' },
-  description:   { validate: v => v.trim().length >= 20,                                             msg: 'Describe the issue (at least 20 characters).' },
-  consent:       { validate: () => document.getElementById('consent')?.checked,                      msg: 'You must confirm the report is accurate.' },
+const VALIDATION_RULES = {
+  reporterName:  { check: v => v.trim().length >= 2,                                              msg: 'Name is required (min 2 chars).' },
+  reporterPhone: { check: v => /^(\+?254|0)[17]\d{8}$/.test(v.replace(/\s/g,'')),                msg: 'Valid Kenyan phone number needed.' },
+  county:        { check: v => v !== '',                                                           msg: 'Select a county.' },
+  location:      { check: v => v.trim().length >= 3,                                              msg: 'Location is required.' },
+  sourceType:    { check: v => v !== '',                                                           msg: 'Select source type.' },
+  issueType:     { check: v => v !== '',                                                           msg: 'Select issue type.' },
+  severity:      { check: () => !!document.querySelector('input[name="severity"]:checked'),       msg: 'Select urgency level.' },
+  description:   { check: v => v.trim().length >= 20,                                             msg: 'Description is too short.' },
+  consent:       { check: () => document.getElementById('consent')?.checked,                      msg: 'Consent required.' },
 };
 
-function showError(id, msg) {
-  const err = document.getElementById('err-' + id);
-  const inp = document.getElementById(id) || (id === 'severity' ? document.getElementById('severityOptions') : null);
-  if (err) err.textContent = msg;
-  if (inp) inp.classList.add('error');
+function displayError(id, message) {
+  const errorLabel = document.getElementById('err-' + id);
+  const inputField = document.getElementById(id) || (id === 'severity' ? document.getElementById('severityOptions') : null);
+  if (errorLabel) errorLabel.textContent = message;
+  if (inputField) inputField.classList.add('error');
 }
 
-function clearError(id) {
-  const err = document.getElementById('err-' + id);
-  const inp = document.getElementById(id) || (id === 'severity' ? document.getElementById('severityOptions') : null);
-  if (err) err.textContent = '';
-  if (inp) inp.classList.remove('error');
+function hideError(id) {
+  const errorLabel = document.getElementById('err-' + id);
+  const inputField = document.getElementById(id) || (id === 'severity' ? document.getElementById('severityOptions') : null);
+  if (errorLabel) errorLabel.textContent = '';
+  if (inputField) inputField.classList.remove('error');
 }
 
-function clearAllErrors() {
-  Object.keys(RULES).forEach(clearError);
+function clearAllFeedback() {
+  Object.keys(VALIDATION_RULES).forEach(hideError);
 }
 
-function validateForm() {
-  let valid = true;
-  clearAllErrors();
-  Object.entries(RULES).forEach(([field, rule]) => {
-    const el = document.getElementById(field);
-    const value = el ? (el.type === 'checkbox' ? el.checked : el.value) : '';
-    if (!rule.validate(value)) {
-      showError(field, rule.msg);
-      valid = false;
+function isFormValid() {
+  let isGood = true;
+  clearAllFeedback();
+  Object.entries(VALIDATION_RULES).forEach(([key, rule]) => {
+    const field = document.getElementById(key);
+    const val = field ? (field.type === 'checkbox' ? field.checked : field.value) : '';
+    if (!rule.check(val)) {
+      displayError(key, rule.msg);
+      isGood = false;
     }
   });
-  return valid;
+  return isGood;
 }
 
-Object.keys(RULES).forEach(field => {
-  const el = document.getElementById(field);
-  if (!el) return;
-  el.addEventListener('blur', () => {
-    const value = el.type === 'checkbox' ? el.checked : el.value;
-    if (!RULES[field].validate(value)) showError(field, RULES[field].msg);
-    else clearError(field);
-  });
-  if (el.type !== 'checkbox' && el.type !== 'radio') {
-    el.addEventListener('input', () => clearError(field));
-  }
-});
-
-const desc = document.getElementById('description');
-const charCount = document.getElementById('charCount');
-if (desc && charCount) {
-  desc.addEventListener('input', () => {
-    const len = desc.value.length;
-    charCount.textContent = `${len} / 500 characters`;
-    charCount.style.color = len > 480 ? '#c0392b' : '';
-    if (len > 500) desc.value = desc.value.slice(0, 500);
+const textArea = document.getElementById('description');
+const counter = document.getElementById('charCount');
+if (textArea && counter) {
+  textArea.addEventListener('input', () => {
+    const currentLen = textArea.value.length;
+    counter.textContent = `${currentLen} / 500 characters`;
+    if (currentLen > 500) textArea.value = textArea.value.slice(0, 500);
   });
 }
 
-const getGPSBtn = document.getElementById('getGPS');
-const gpsInput  = document.getElementById('gpsCoords');
-const gpsStatus = document.getElementById('gpsStatus');
-if (getGPSBtn) {
-  getGPSBtn.addEventListener('click', () => {
+const gpsBtn = document.getElementById('getGPS');
+const gpsField = document.getElementById('gpsCoords');
+const gpsInfo = document.getElementById('gpsStatus');
+if (gpsBtn) {
+  gpsBtn.addEventListener('click', () => {
     if (!navigator.geolocation) {
-      gpsStatus.textContent = 'Geolocation not supported.';
+      gpsInfo.textContent = 'GPS not supported.';
       return;
     }
-    getGPSBtn.textContent = '⏳ Getting location…';
-    getGPSBtn.disabled = true;
+    gpsBtn.textContent = 'Locating...';
+    gpsBtn.disabled = true;
     navigator.geolocation.getCurrentPosition(
       pos => {
-        gpsInput.value = `${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`;
-        gpsStatus.textContent = `📍 Captured (±${Math.round(pos.coords.accuracy)}m)`;
-        gpsStatus.style.color = '#16a34a';
-        getGPSBtn.textContent = '✅ Location Set';
-        getGPSBtn.disabled = false;
+        gpsField.value = `${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`;
+        gpsInfo.textContent = 'Location captured';
+        gpsBtn.textContent = 'Location Set';
+        gpsBtn.disabled = false;
       },
       err => {
-        gpsStatus.textContent = 'Could not get location. ' + err.message;
-        gpsStatus.style.color = '#c0392b';
-        getGPSBtn.textContent = '📍 Get My Location';
-        getGPSBtn.disabled = false;
-      },
-      {
-        timeout: 10000
+        gpsInfo.textContent = 'Error: ' + err.message;
+        gpsBtn.textContent = 'Retry';
+        gpsBtn.disabled = false;
       }
     );
   });
@@ -139,15 +120,10 @@ if (getGPSBtn) {
 
 document.getElementById('reportForm')?.addEventListener('submit', e => {
   e.preventDefault();
-  if (!validateForm()) {
-    document.querySelector('.error')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
-    });
-    return;
-  }
-  const report = {
-    id: generateId(),
+  if (!isFormValid()) return;
+  
+  const newReport = {
+    id: makeReportId(),
     timestamp: new Date().toISOString(),
     reporterName: document.getElementById('reporterName').value.trim(),
     reporterPhone: document.getElementById('reporterPhone').value.trim(),
@@ -159,35 +135,28 @@ document.getElementById('reportForm')?.addEventListener('submit', e => {
     description: document.getElementById('description').value.trim(),
     gpsCoords: document.getElementById('gpsCoords').value || 'Not provided',
   };
-  const reports = getReports();
-  reports.push(report);
-  saveReports(reports);
-  document.getElementById('reportRefId').textContent = report.id;
+  
+  const currentList = loadReports();
+  currentList.push(newReport);
+  persistReports(currentList);
+  
+  document.getElementById('reportRefId').textContent = newReport.id;
   document.getElementById('successModal').style.display = 'flex';
   document.getElementById('reportForm').reset();
-  clearAllErrors();
-  if (charCount) charCount.textContent = '0 / 500 characters';
-  if (gpsInput) gpsInput.value = '';
-  if (gpsStatus) {
-    gpsStatus.textContent = '';
-  }
-  if (getGPSBtn) getGPSBtn.textContent = '📍 Get My Location';
-  renderRecentReports();
+  clearAllFeedback();
+  showRecentReports();
 });
 
-function closeModal() {
+function closeSuccessModal() {
   document.getElementById('successModal').style.display = 'none';
 }
-window.closeModal = closeModal;
-document.getElementById('successModal')?.addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+window.closeModal = closeSuccessModal;
 
 document.getElementById('clearReports')?.addEventListener('click', () => {
-  if (confirm('Delete all stored reports?')) {
+  if (confirm('Wipe all reports?')) {
     localStorage.removeItem('majiReports');
-    renderRecentReports();
+    showRecentReports();
   }
 });
 
-renderRecentReports();
+showRecentReports();

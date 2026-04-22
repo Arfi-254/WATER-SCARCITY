@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Maji Safi Water Source Management System</title>
-  <link rel="stylesheet" href="/style.css" />
+  <title>Maji Safi - Water Management</title>
+  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <script src="auth.js"></script>
 </head>
 <body>
 
-<!-- NAV -->
+<div id="droughtAlert" style="display:none; padding: 12px; text-align: center; background: #f9a825; font-size: 0.9rem; font-weight: 500;"></div>
+
 <nav class="navbar">
   <div class="nav-inner">
     <a href="index.html" class="logo">
@@ -21,134 +22,130 @@
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-links" id="navLinks">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="source.html">Water Sources</a></li>
-      <li><a href="signup.html">Report Issue</a></li>
-      <!-- Dynamic links injected here -->
     </ul>
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-bg">
     <div class="blob blob1"></div>
-    <div class="blob blob2"></div>
     <div class="blob blob3"></div>
   </div>
   <div class="hero-content">
     <span class="badge">Northeastern Kenya</span>
     <h1>Every Drop<br><em>Counts.</em></h1>
-    <p class="hero-sub">Connecting communities in Garissa, Wajir and Mandera to safe, reliable water sources — especially when it matters most.</p>
+    <p class="hero-sub">Reliable information on water sources for communities in Garissa, Wajir and Mandera.</p>
     <div class="hero-cta" id="heroCta">
       <a href="source.html" class="btn btn-primary">Find Water Sources</a>
-      <a href="signup.html" class="btn btn-outline">Join Us Now</a>
+      <a href="signup.html" class="btn btn-outline">Join Us</a>
     </div>
   </div>
   <div class="hero-stats">
     <div class="stat-card">
       <span class="stat-num" id="totalSources">48</span>
-      <span class="stat-label">Registered Sources</span>
+      <span class="stat-label">Total Sources</span>
     </div>
     <div class="stat-card">
       <span class="stat-num working" id="workingSources">34</span>
-      <span class="stat-label">Currently Working</span>
+      <span class="stat-label">Working</span>
     </div>
     <div class="stat-card">
       <span class="stat-num broken" id="brokenSources">14</span>
       <span class="stat-label">Needs Repair</span>
     </div>
-    <div class="stat-card">
-      <span class="stat-num" id="reportsCount">0</span>
-      <span class="stat-label">Community Reports</span>
-    </div>
   </div>
 </section>
 
-<!-- CHALLENGES -->
 <section class="section challenges-section">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">The Crisis</span>
-      <h2>Water Challenges in<br>Northeastern Kenya</h2>
+      <h2>Regional Water Challenges</h2>
     </div>
     <div class="challenges-grid">
       <div class="challenge-card">
         <div class="challenge-icon">🌵</div>
         <h3>Severe Drought</h3>
-        <p>Garissa, Wajir, and Mandera face prolonged droughts that dry up seasonal rivers and water pans, leaving millions without adequate water for months.</p>
+        <p>Prolonged droughts often dry up seasonal rivers, leaving communities without stable water for months.</p>
       </div>
       <div class="challenge-card">
         <div class="challenge-icon">⚙️</div>
         <h3>Broken Infrastructure</h3>
-        <p>Many boreholes and hand pumps fall into disrepair. Without a reliable reporting system, communities suffer for weeks before maintenance teams are dispatched.</p>
+        <p>Boreholes and pumps often fall into disrepair, and without quick reporting, they remain broken for weeks.</p>
       </div>
       <div class="challenge-card">
         <div class="challenge-icon">📍</div>
         <h3>Remote Locations</h3>
-        <p>Dispersed settlements mean communities travel 10–30 km to fetch water, losing productive hours and exposing women and children to safety risks.</p>
+        <p>Many pastoralist communities travel over 20km to reach the nearest functional water point.</p>
       </div>
       <div class="challenge-card">
         <div class="challenge-icon">💧</div>
         <h3>Water Quality</h3>
-        <p>Contamination from pastoralist activities, poor sanitation, and stagnant water pans cause waterborne diseases that disproportionately affect children under five.</p>
-      </div>
-      <div class="challenge-card">
-        <div class="challenge-icon">🗺️</div>
-        <h3>Poor Data</h3>
-        <p>County water offices lack real-time information on which sources are functional, making resource allocation inefficient during emergency responses.</p>
-      </div>
-      <div class="challenge-card">
-        <div class="challenge-icon">👥</div>
-        <h3>Community Gap</h3>
-        <p>No formal channel exists for communities to communicate directly with water authorities, creating delays between breakdown and repair.</p>
+        <p>Contamination in open water pans causes preventable diseases that impact the most vulnerable.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
+<section class="section" style="background: var(--surface2);">
+  <div class="container">
+    <div class="section-header center">
+      <span class="section-tag">Action</span>
+      <h2>Water Conservation Tips</h2>
+    </div>
+    <div class="challenges-grid">
+      <div class="challenge-card">
+        <h3>Harvest Rainwater</h3>
+        <p>Capture runoff from roofs during the rainy season to use for livestock or cleaning.</p>
+      </div>
+      <div class="challenge-card">
+        <h3>Fix Leaks Fast</h3>
+        <p>Even small leaks in pipes or taps can waste dozens of liters every day.</p>
+      </div>
+      <div class="challenge-card">
+        <h3>Reuse Greywater</h3>
+        <p>Use water from washing clothes or vegetables to water gardens or suppress dust.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section how-section">
   <div class="container">
     <div class="section-header center">
-      <span class="section-tag">How It Works</span>
-      <h2>Simple. Fast. Lifesaving.</h2>
+      <span class="section-tag">Process</span>
+      <h2>How it works</h2>
     </div>
-    <div class="steps">
+    <div class="steps" style="justify-content: center; gap: 40px;">
       <div class="step">
         <div class="step-num">01</div>
         <h3>Find a Source</h3>
-        <p>Browse boreholes and wells in your county. Filter by status to find working water points near you.</p>
+        <p>Browse the map or directory to find working points near you.</p>
       </div>
-      <div class="step-arrow">→</div>
       <div class="step">
         <div class="step-num">02</div>
         <h3>Check Status</h3>
-        <p>Real-time status shows whether a source is operational, under repair, or non-functional.</p>
+        <p>See if a source is functional before you start your journey.</p>
       </div>
-      <div class="step-arrow">→</div>
       <div class="step">
         <div class="step-num">03</div>
-        <h3>Join Community</h3>
-        <p>Create an account to access your personal dashboard and stay updated on maintenance in your area.</p>
+        <h3>Join Us</h3>
+        <p>Create an account to report issues directly to the water office.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- COUNTIES -->
 <section class="section counties-section">
   <div class="container">
     <div class="section-header center">
-      <span class="section-tag">Coverage</span>
-      <h2>Three Counties. One Mission.</h2>
+      <h2>County Coverage</h2>
     </div>
     <div class="counties-grid">
       <a href="source.html?county=Garissa" class="county-card">
         <div class="county-visual garissa"></div>
         <div class="county-info">
           <h3>Garissa</h3>
-          <p>Serving communities along the Tana River corridor and remote pastoralist villages.</p>
           <span class="county-link">View Sources →</span>
         </div>
       </a>
@@ -156,7 +153,6 @@
         <div class="county-visual wajir"></div>
         <div class="county-info">
           <h3>Wajir</h3>
-          <p>Mapping boreholes across the arid rangeland of Kenya's largest county by area.</p>
           <span class="county-link">View Sources →</span>
         </div>
       </a>
@@ -164,7 +160,6 @@
         <div class="county-visual mandera"></div>
         <div class="county-info">
           <h3>Mandera</h3>
-          <p>Supporting cross-border communities at the Kenya-Ethiopia-Somalia tri-border area.</p>
           <span class="county-link">View Sources →</span>
         </div>
       </a>
@@ -172,76 +167,22 @@
   </div>
 </section>
 
-<!-- CTA BANNER -->
-<section class="cta-banner">
-  <div class="container">
-    <h2>Know of a broken water point?</h2>
-    <p>Your report saves lives. It takes less than 2 minutes.</p>
-    <a href="signup.html" class="btn btn-white">Submit a Report</a>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <span class="logo-drop">💧</span>
       <strong>MAJI SAFI</strong>
-      <p>Water Source Management System<br>Northeastern Kenya</p>
+      <p>Water Management for Northeastern Kenya</p>
     </div>
     <div class="footer-links">
       <a href="index.html">Home</a>
       <a href="source.html">Water Sources</a>
     </div>
     <div class="footer-note">
-      <p>© 2025 Maji Safi. Built for communities in Garissa, Wajir & Mandera.</p>
-      <p>In emergencies call: <strong>0800 723 599</strong></p>
+      <p>© 2025 Maji Safi. Helping communities in Garissa, Wajir & Mandera.</p>
     </div>
   </div>
 </footer>
 
 <script src="main.js"></script>
-<script>
-  function updateNav() {
-    const navLinks = document.getElementById('navLinks');
-    const heroCta = document.getElementById('heroCta');
-    const session = getSession();
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-
-    if (session) {
-      const dashUrl = session.role === 'admin' ? 'admin/index.html' : 'dashboard.html';
-      
-      // On the home page, we only want to show the Logout button in the nav
-      navLinks.innerHTML = `
-        <li><button onclick="logout()" class="btn btn-outline btn-sm" style="margin-left:10px;">Logout</button></li>
-      `;
-
-      // Update Hero CTA to only show Dashboard link (removing Report link as requested)
-      if (heroCta) {
-        heroCta.innerHTML = `
-          <a href="${dashUrl}" class="btn btn-primary">Go to My Dashboard</a>
-        `;
-      }
-    } else {
-      // Guest Nav
-      navLinks.innerHTML = `
-        <li><a href="index.html" class="${currentPage === 'index.html' ? 'active' : ''}">Home</a></li>
-        <li><a href="source.html">Water Sources</a></li>
-        <li><a href="signup.html">Report a Problem</a></li>
-        <li style="display: flex; align-items: center; margin-left: 10px;">
-          <a href="signup.html" class="btn btn-primary btn-sm" style="color:white;">Join Us</a>
-        </li>
-      `;
-      // Guest Hero
-      heroCta.innerHTML = `
-        <a href="source.html" class="btn btn-primary">Find Water Sources</a>
-        <a href="signup.html" class="btn btn-outline">Report an Issue</a>
-      `;
-    }
-  }
-  document.addEventListener('DOMContentLoaded', updateNav);
-</script>
-</body>
-</html>t>
 </body>
 </html>

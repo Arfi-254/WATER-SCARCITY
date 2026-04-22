@@ -1,4 +1,4 @@
-const WATER_SOURCES = [
+const ALL_WATER_POINTS = [
   { id:1,  name:"Balambala Borehole BH-001",  county:"Garissa", subLocation:"Balambala",     type:"Borehole",  status:"Working",      capacity:"5,000 L/day",  depth:"120m",  lastChecked:"2025-06-01" },
   { id:2,  name:"Dadaab Main Well",            county:"Garissa", subLocation:"Dadaab",        type:"Open Well", status:"Working",      capacity:"3,000 L/day",  depth:"35m",   lastChecked:"2025-05-28" },
   { id:3,  name:"Fafi Hand Pump FP-007",       county:"Garissa", subLocation:"Fafi",          type:"Hand Pump", status:"Not Working",  capacity:"800 L/day",    depth:"60m",   lastChecked:"2025-05-10" },
@@ -37,90 +37,94 @@ const WATER_SOURCES = [
   { id:36, name:"Arabia Water Pan WP-08",      county:"Mandera", subLocation:"Arabia",        type:"Water Pan", status:"Working",      capacity:"22,000 L",     depth:"N/A",   lastChecked:"2025-05-25" },
 ];
 
-function statusBadge(status) {
-  const map = {
-    "Working":      { cls:"status-working", icon:"✅" },
-    "Not Working":  { cls:"status-broken",  icon:"❌" },
-    "Under Repair": { cls:"status-repair",  icon:"🔧" },
+function getStatusLabel(status) {
+  const settings = {
+    "Working":      { className:"status-working", icon:"✅" },
+    "Not Working":  { className:"status-broken",  icon:"❌" },
+    "Under Repair": { className:"status-repair",  icon:"🔧" },
   };
-  const s = map[status] || { cls:"", icon:"❓" };
-  return `<span class="status-badge ${s.cls}">${s.icon} ${status}</span>`;
+  const config = settings[status] || { className:"", icon:"❓" };
+  return `<span class="status-badge ${config.className}">${config.icon} ${status}</span>`;
 }
 
-function renderSources(sources) {
-  const grid  = document.getElementById('sourcesGrid');
-  const count = document.getElementById('resultsCount');
-  const empty = document.getElementById('emptyState');
-  if (!grid) return;
+function displayWaterSources(list) {
+  const container = document.getElementById('sourcesGrid');
+  const countLabel = document.getElementById('resultsCount');
+  const noDataMsg = document.getElementById('emptyState');
+  
+  if (!container) return;
 
-  if (sources.length === 0) {
-    grid.innerHTML = '';
-    if (empty) empty.style.display = 'block';
-    if (count) count.textContent = 'No sources found';
+  if (list.length === 0) {
+    container.innerHTML = '';
+    if (noDataMsg) noDataMsg.style.display = 'block';
+    if (countLabel) countLabel.textContent = 'No sources found';
     return;
   }
-  if (empty) empty.style.display = 'none';
-  if (count) count.textContent = `Showing ${sources.length} of ${WATER_SOURCES.length} water sources`;
+  
+  if (noDataMsg) noDataMsg.style.display = 'none';
+  if (countLabel) countLabel.textContent = `Showing ${list.length} of ${ALL_WATER_POINTS.length} water sources`;
 
-  grid.innerHTML = sources.map(s => `
+  container.innerHTML = list.map(item => `
     <div class="source-card">
       <div class="source-card-top">
-        <h3>${s.name}</h3>
-        ${statusBadge(s.status)}
+        <h3>${item.name}</h3>
+        ${getStatusLabel(item.status)}
       </div>
       <div class="source-card-body">
         <div class="source-meta">
-          <div class="source-meta-row"><strong>📍 County</strong> ${s.county}</div>
-          <div class="source-meta-row"><strong>🏘️ Location</strong> ${s.subLocation}</div>
-          <div class="source-meta-row"><strong>💧 Capacity</strong> ${s.capacity}</div>
-          <div class="source-meta-row"><strong>⛏️ Depth</strong> ${s.depth}</div>
+          <div class="source-meta-row"><strong>📍 County</strong> ${item.county}</div>
+          <div class="source-meta-row"><strong>🏘️ Location</strong> ${item.subLocation}</div>
+          <div class="source-meta-row"><strong>💧 Capacity</strong> ${item.capacity}</div>
+          <div class="source-meta-row"><strong>⛏️ Depth</strong> ${item.depth}</div>
         </div>
       </div>
       <div class="source-card-foot">
-        <span class="source-type-tag">${s.type}</span>
-        <span>Last checked: ${s.lastChecked}</span>
+        <span class="source-type-tag">${item.type}</span>
+        <span>Checked: ${item.lastChecked}</span>
       </div>
     </div>
   `).join('');
 }
 
-function applyFilters() {
-  const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
-  const county = document.getElementById('filterCounty')?.value || '';
-  const status = document.getElementById('filterStatus')?.value || '';
-  const type   = document.getElementById('filterType')?.value || '';
+function runFilters() {
+  const query = document.getElementById('searchInput')?.value.toLowerCase() || '';
+  const selectedCounty = document.getElementById('filterCounty')?.value || '';
+  const selectedStatus = document.getElementById('filterStatus')?.value || '';
+  const selectedType = document.getElementById('filterType')?.value || '';
 
-  const filtered = WATER_SOURCES.filter(s =>
-    (!search || s.name.toLowerCase().includes(search) || s.subLocation.toLowerCase().includes(search) || s.county.toLowerCase().includes(search)) &&
-    (!county || s.county === county) &&
-    (!status || s.status === status) &&
-    (!type   || s.type   === type)
+  const results = ALL_WATER_POINTS.filter(p =>
+    (!query || p.name.toLowerCase().includes(query) || p.subLocation.toLowerCase().includes(query) || p.county.toLowerCase().includes(query)) &&
+    (!selectedCounty || p.county === selectedCounty) &&
+    (!selectedStatus || p.status === selectedStatus) &&
+    (!selectedType || p.type === selectedType)
   );
-  renderSources(filtered);
+  displayWaterSources(results);
 }
-function clearAllFilters(){
-    ['searchInput','filterCounty','filterStatus','filterType'].forEach(id=>{
-        const el = document.getElementById(id);
-        if (el)el.value = '';
-    });
-    applyFilters();
+
+function resetAll() {
+  ['searchInput','filterCounty','filterStatus','filterType'].forEach(id => {
+    const input = document.getElementById(id);
+    if (input) input.value = '';
+  });
+  runFilters();
 }
-document.addEventListener('DOMContentLoaded',()=>{
-    const params = new URLSearchParams(window.location.search);
-    const county= params.get('county');
-    if(county){
-        const el = document.getElementById('filterCounty');
-        if(el) el.value = county;
-    }
-    applyFilters();
 
-    document.getElementById('searchInput')?.addEventListener('input',applyFilters);
-    document.getElementById('filterCounty')?.addEventListener('change',applyFilters);
-    document.getElementById('filterStatus')?.addEventListener('change',applyFilters);
-    document.getElementById('filterType')?.addEventListener('change',applyFilters);
-    document.getElementById('clearFilters')?.addEventListener('click',clearAllFilters);
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialCounty = urlParams.get('county');
+  
+  if (initialCounty) {
+    const countySelect = document.getElementById('filterCounty');
+    if (countySelect) countySelect.value = initialCounty;
+  }
+  
+  runFilters();
 
+  document.getElementById('searchInput')?.addEventListener('input', runFilters);
+  document.getElementById('filterCounty')?.addEventListener('change', runFilters);
+  document.getElementById('filterStatus')?.addEventListener('change', runFilters);
+  document.getElementById('filterType')?.addEventListener('change', runFilters);
+  document.getElementById('clearFilters')?.addEventListener('click', resetAll);
 });
 
-
-window.clearAllFilters = clearAllFilters;
+window.clearAllFilters = resetAll;

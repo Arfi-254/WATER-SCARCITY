@@ -1,93 +1,85 @@
-const USERS_KEY = 'majiUsers';
-const SESSION_KEY = 'majiSession';
+const USERS_STORAGE_KEY = 'majiUsers';
+const USER_SESSION_KEY = 'majiSession';
 
-// Seed Admin if not exists
-function seedAdmin() {
-  const users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
-  const adminExists = users.find(u => u.email === 'admin@majisafi.com');
+function prepareAdminAccount() {
+  const allUsers = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) || '[]');
+  const hasAdmin = allUsers.some(u => u.email === 'admin@majisafi.com');
   
-  if (!adminExists) {
-    users.push({
-      id: 'usr-' + Date.now(),
-      name: 'System Admin',
+  if (!hasAdmin) {
+    allUsers.push({
+      id: 'admin-' + Date.now(),
+      name: 'System Administrator',
       email: 'admin@majisafi.com',
-      password: 'admin123', // In a real app, this would be hashed
+      password: 'admin123',
       role: 'admin',
       county: 'All'
     });
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    console.log('Admin account seeded: admin@majisafi.com / admin123');
+    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(allUsers));
   }
 }
 
-function signup(name, email, password, county) {
-  const users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
-  if (users.find(u => u.email === email)) {
-    throw new Error('Email already registered');
+function signup(fullName, emailAddress, secretPassword, userCounty) {
+  const existingUsers = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) || '[]');
+  if (existingUsers.find(u => u.email === emailAddress)) {
+    throw new Error('This email is already in use.');
   }
   
-  const newUser = {
-    id: 'usr-' + Date.now(),
-    name,
-    email,
-    password,
-    county,
+  const newUserRecord = {
+    id: 'u-' + Math.random().toString(36).substr(2, 9),
+    name: fullName,
+    email: emailAddress,
+    password: secretPassword,
+    county: userCounty,
     role: 'user'
   };
   
-  users.push(newUser);
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  return newUser;
+  existingUsers.push(newUserRecord);
+  localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(existingUsers));
+  return newUserRecord;
 }
 
-function login(email, password) {
-  const users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
-  const user = users.find(u => u.email === email && u.password === password);
+function login(emailInput, passwordInput) {
+  const usersList = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) || '[]');
+  const matchedUser = usersList.find(u => u.email === emailInput && u.password === passwordInput);
   
-  if (!user) {
-    throw new Error('Invalid email or password');
+  if (!matchedUser) {
+    throw new Error('Incorrect email or password.');
   }
   
-  localStorage.setItem(SESSION_KEY, JSON.stringify({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    county: user.county
-  }));
+  const sessionData = {
+    id: matchedUser.id,
+    name: matchedUser.name,
+    email: matchedUser.email,
+    role: matchedUser.role,
+    county: matchedUser.county
+  };
   
-  return user;
+  localStorage.setItem(USER_SESSION_KEY, JSON.stringify(sessionData));
+  return matchedUser;
 }
 
 function logout() {
-  document.body.style.transition = 'opacity 0.4s ease';
   document.body.style.opacity = '0.5';
-  document.body.style.pointerEvents = 'none';
-  
   setTimeout(() => {
-    localStorage.removeItem(SESSION_KEY);
-    window.location.href = '/index.html';
-  }, 600);
+    localStorage.removeItem(USER_SESSION_KEY);
+    window.location.href = 'index.html';
+  }, 300);
 }
 
 function getSession() {
-  return JSON.parse(localStorage.getItem(SESSION_KEY));
+  const savedSession = localStorage.getItem(USER_SESSION_KEY);
+  return savedSession ? JSON.parse(savedSession) : null;
 }
 
-function isAuthenticated() {
-  return !!localStorage.getItem(SESSION_KEY);
-}
-
-function requireAuth(role = null) {
-  const session = getSession();
-  if (!session) {
-    window.location.href = '/login.html';
+function requireAuth(accessLevel = null) {
+  const activeSession = getSession();
+  if (!activeSession) {
+    window.location.href = 'login.html';
     return;
   }
-  if (role && session.role !== role) {
-    window.location.href = session.role === 'admin' ? '/admin/index.html' : '/dashboard.html';
+  if (accessLevel && activeSession.role !== accessLevel) {
+    window.location.href = activeSession.role === 'admin' ? 'admin/index.html' : 'dashboard.html';
   }
 }
 
-// Auto-seed on load
-seedAdmin();
+prepareAdminAccount();

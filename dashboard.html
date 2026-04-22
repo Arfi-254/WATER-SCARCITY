@@ -3,18 +3,9 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Dashboard – Maji Safi</title>
+  <title>Dashboard - Maji Safi</title>
   <link rel="stylesheet" href="style.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <style>
-    .user-welcome { background: var(--primary-dark); padding: 60px 0 40px; color: var(--white); }
-    .user-welcome h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 8px; }
-    .user-welcome p { color: rgba(255,255,255,0.7); }
-    .user-grid { display: grid; grid-template-columns: 1fr 350px; gap: 30px; margin-top: -30px; }
-    .user-main-card { background: var(--white); border-radius: var(--radius-lg); padding: 30px; box-shadow: var(--shadow); border: 1px solid var(--border); }
-    .user-side-card { background: var(--white); border-radius: var(--radius-lg); padding: 25px; box-shadow: var(--shadow); border: 1px solid var(--border); height: fit-content; }
-    .card-title { font-family: var(--font-display); font-size: 1.3rem; color: var(--primary-dark); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-  </style>
 </head>
 <body>
 
@@ -31,7 +22,6 @@
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-links" id="navLinks">
-      <!-- Injected by JS -->
     </ul>
   </div>
 </nav>
@@ -41,8 +31,8 @@
     <div style="display:flex; justify-content:space-between; align-items:flex-end;">
       <div>
         <span class="badge" id="userCounty"></span>
-        <h1 id="welcomeText">Hello, User</h1>
-        <p>Manage your water reports and stay updated on local water sources.</p>
+        <h1 id="welcomeText">Dashboard</h1>
+        <p>Access your water reports and county updates here.</p>
       </div>
     </div>
   </div>
@@ -52,16 +42,15 @@
   <div class="container user-grid">
     <div class="user-main-card">
       <div class="card-title">
-        <span>My Recent Reports</span>
+        <span>Recent Reports</span>
         <a href="report.html" class="btn btn-primary btn-sm">+ New Report</a>
       </div>
       <div id="userReportsList">
-        <!-- Reports will be injected here -->
       </div>
     </div>
 
     <div class="user-side-card">
-      <div class="card-title">Profile Info</div>
+      <div class="card-title">My Profile</div>
       <div class="contact-list">
         <div class="contact-item">
           <span>📧</span>
@@ -73,72 +62,17 @@
         <div class="contact-item">
           <span>📍</span>
           <div>
-            <strong>Assigned County</strong>
+            <strong>County</strong>
             <p id="profileCounty"></p>
           </div>
         </div>
       </div>
       <hr style="margin:20px 0; border:0; border-top:1px solid var(--border);">
-      <p style="font-size:0.85rem; color:var(--text-muted);">Your reports are sent directly to the <span id="countyName"></span> County Water Office.</p>
+      <p style="font-size:0.85rem; color:var(--text-muted);">Reports are sent to the <span id="countyName"></span> Water Office.</p>
     </div>
   </div>
 </section>
 
-<script>
-  function updateNav() {
-    const navLinks = document.getElementById('navLinks');
-    const session = getSession();
-    const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
-
-    if (session) {
-      navLinks.innerHTML = `
-        <li><a href="dashboard.html" class="${currentPage === 'dashboard.html' ? 'active' : ''}">My Dashboard</a></li>
-        <li><a href="report.html" class="${currentPage === 'report.html' ? 'active' : ''}">Report Issue</a></li>
-        <li><button onclick="logout()" class="btn btn-outline btn-sm" style="margin-left:10px;">Logout</button></li>
-      `;
-    }
-  }
-  document.addEventListener('DOMContentLoaded', updateNav);
-
-  const session = getSession();
-  if (session) {
-    document.getElementById('welcomeText').textContent = `Hello, ${session.name.split(' ')[0]}`;
-    document.getElementById('userCounty').textContent = session.county;
-    document.getElementById('profileCounty').textContent = session.county;
-    document.getElementById('userEmail').textContent = session.email;
-    document.getElementById('countyName').textContent = session.county;
-  }
-
-  function renderUserReports() {
-    const reports = JSON.parse(localStorage.getItem('majiReports') || '[]');
-    const userReports = reports.filter(r => r.reporterName === session.name); 
-    const container = document.getElementById('userReportsList');
-
-    if (userReports.length === 0) {
-      container.innerHTML = `
-        <div class="empty-state">
-          <p>You haven't submitted any reports yet.</p>
-          <a href="report.html" class="btn btn-outline btn-sm">Report a Water Issue</a>
-        </div>`;
-      return;
-    }
-
-    container.innerHTML = userReports.reverse().map(r => `
-      <div class="report-item">
-        <div class="report-item-header">
-          <span class="report-item-loc">${r.location}</span>
-          <span class="report-item-date">${new Date(r.timestamp).toLocaleDateString()}</span>
-        </div>
-        <div class="report-item-issue">${r.issueType}</div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-          <span class="report-item-sev sev-${r.severity}">${r.severity} Urgency</span>
-          <span class="ref-id">${r.id}</span>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  renderUserReports();
-</script>
+<script src="userDashboard.js"></script>
 </body>
 </html>

@@ -1,94 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign Up – Maji Safi</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>Sign Up - Maji Safi</title>
+  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <style>
-    .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; background: var(--surface2); }
-    .auth-card { background: var(--white); border-radius: var(--radius-lg); padding: 40px; width: 100%; max-width: 440px; box-shadow: var(--shadow-md); border: 1px solid var(--border); }
-    .auth-header { text-align: center; margin-bottom: 32px; }
-    .auth-header .logo { justify-content: center; margin-bottom: 12px; }
-    .auth-header h1 { font-family: var(--font-display); font-size: 1.8rem; color: var(--primary-dark); }
-    .auth-error { color: var(--danger); font-size: 0.875rem; background: #fee2e2; border: 1px solid #fca5a5; padding: 10px; border-radius: 8px; margin-bottom: 20px; display: none; }
-    .auth-footer { text-align: center; margin-top: 24px; font-size: 0.9rem; color: var(--text-muted); }
-    .auth-footer a { color: var(--primary); font-weight: 600; }
-  </style>
+  <script src="auth.js"></script>
 </head>
-<body class="auth-page">
+<body style="background: var(--surface2); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 0;">
 
-<div class="auth-card">
-  <div class="auth-header">
-    <a href="index.html" class="logo">
+<div style="width: 100%; max-width: 480px; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <a href="index.html" class="logo" style="justify-content: center;">
       <span class="logo-drop">💧</span>
       <span>MAJI SAFI</span>
     </a>
-    <h1>Create Account</h1>
-    <p>Join the Maji Safi community</p>
   </div>
 
-  <div id="signupError" class="auth-error"></div>
+  <div style="background: var(--white); border-radius: var(--radius-lg); padding: 40px; box-shadow: var(--shadow); border: 1px solid var(--border);">
+    <h2 style="font-family: var(--font-display); margin-bottom: 10px;">Join Maji Safi</h2>
+    <p style="color: var(--text-muted); margin-bottom: 30px; font-size: 0.95rem;">Join us to report water issues and help your community.</p>
 
-  <form id="signupForm">
-    <div class="form-group">
-      <label for="name">Full Name</label>
-      <input type="text" id="name" required placeholder="e.g. Hassan Mohamed"/>
-    </div>
-    <div class="form-group">
-      <label for="email">Email Address</label>
-      <input type="email" id="email" required placeholder="e.g. name@example.com"/>
-    </div>
-    <div class="form-group">
-      <label for="county">County</label>
-      <select id="county" required>
-        <option value="">Select your county</option>
-        <option value="Garissa">Garissa</option>
-        <option value="Wajir">Wajir</option>
-        <option value="Mandera">Mandera</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" id="password" required placeholder="••••••••" minlength="6"/>
-    </div>
-    <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
-  </form>
+    <form id="signupForm">
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label for="name" style="display: block; margin-bottom: 8px; font-weight: 500;">Full Name</label>
+        <input type="text" id="name" class="form-control" required style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius);">
+      </div>
 
-  <div class="auth-footer">
-    Already have an account? <a href="login.html">Sign in</a>
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label for="email" style="display: block; margin-bottom: 8px; font-weight: 500;">Email Address</label>
+        <input type="email" id="email" class="form-control" required style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius);">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label for="password" style="display: block; margin-bottom: 8px; font-weight: 500;">Create Password</label>
+        <input type="password" id="password" class="form-control" required style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius);">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 30px;">
+        <label for="county" style="display: block; margin-bottom: 8px; font-weight: 500;">Your County</label>
+        <select id="county" class="form-control" required style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius); background: white;">
+          <option value="">Select your county</option>
+          <option value="Garissa">Garissa</option>
+          <option value="Wajir">Wajir</option>
+          <option value="Mandera">Mandera</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" style="padding: 14px;">Create Account</button>
+    </form>
+
+    <div style="margin-top: 30px; text-align: center; font-size: 0.9rem; color: var(--text-muted);">
+      Already have an account? <a href="login.html" style="color: var(--primary); font-weight: 600;">Sign in here</a>
+    </div>
   </div>
 </div>
 
-<script src="auth.js"></script>
-<script>
-  document.getElementById('signupForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const county = document.getElementById('county').value;
-    const password = document.getElementById('password').value;
-    const errEl = document.getElementById('signupError');
-    const btn = e.target.querySelector('button[type="submit"]');
-
-    btn.textContent = 'Creating Account...';
-    btn.disabled = true;
-    errEl.style.display = 'none';
-
-    setTimeout(() => {
-      try {
-        signup(name, email, password, county);
-        login(email, password); // Log in immediately after signup
-        window.location.href = 'dashboard.html';
-      } catch (err) {
-        errEl.textContent = err.message;
-        errEl.style.display = 'block';
-        btn.textContent = 'Sign Up';
-        btn.disabled = false;
-      }
-    }, 800); // Simulated network delay
-  });
-</script>
+<script src="signup.js"></script>
 </body>
 </html>
